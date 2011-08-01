@@ -130,25 +130,35 @@ public class CurrentCostReader implements Runnable, SerialPortEventListener
 				System.out.println("starting input scanner");
 				while (inputScanner.hasNext())
 				{
-					
+
 					String parsableLine = inputScanner.next();
 					System.out.println(parsableLine);
-					try
+					if(parsableLine.contains("hist"))
 					{
-						int sensorId = Integer.parseInt(parseSingleElement(parsableLine, "sensor"));
-						double value = Double.parseDouble(parseSingleElement(parsableLine, "watts"));
-						readings.add(new Reading(sensorId, value));
+						// do nothing
 					}
-					catch (NumberFormatException n)
+					else
 					{
-						n.printStackTrace();
-					}
-					if (parsableLine.contains("</msg>"))
-					{
+						if(parsableLine.contains("msg"))
+						{
+							try
+							{
+								int sensorId = Integer.parseInt(parseSingleElement(parsableLine, "sensor"));
+								double value = Double.parseDouble(parseSingleElement(parsableLine, "watts"));
+								readings.add(new Reading(sensorId, value));
+							}
+							catch (NumberFormatException n)
+							{
+								n.printStackTrace();
+							}
+							if (parsableLine.contains("</msg>"))
+							{
 
-						ReadingSet rSet = new ReadingSet(user, apiKey, hubId, System.currentTimeMillis(), readings);
-						rSet.upload();
-						readings.clear();
+								ReadingSet rSet = new ReadingSet(user, apiKey, hubId, System.currentTimeMillis(), readings);
+								rSet.upload();
+								readings.clear();
+							}
+						}
 					}
 				}
 		}
