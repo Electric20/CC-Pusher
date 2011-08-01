@@ -26,7 +26,8 @@ public class ReadingSet {
 	private int hubId;
 	private ArrayList<Reading> readings;
 	
-	public ReadingSet (String user, String apiKey, int hubId, long timeStamp, ArrayList<Reading> readings) {
+	public ReadingSet (String user, String apiKey, int hubId, long timeStamp, ArrayList<Reading> readings) 
+	{
 		setUser(user);
 		setApiKey(apiKey);
 		setHubId(hubId);
@@ -62,51 +63,64 @@ public class ReadingSet {
 		this.user = user;
 	}
 
-	public String getUser() {
+	public String getUser() 
+	{
 		return user;
 	}
 
-	public void setApiKey(String apiKey) {
+	public void setApiKey(String apiKey) 
+	{
 		this.apiKey = apiKey;
 	}
 
-	public String getApiKey() {
+	public String getApiKey() 
+	{
 		return apiKey;
 	}
 
-	public void setTimeStamp(long timeStamp) {
+	public void setTimeStamp(long timeStamp) 
+	{
 		this.timeStamp = timeStamp;
 	}
 
-	public long getTimeStamp() {
+	public long getTimeStamp() 
+	{
 		return timeStamp;
 	}
 
-	public void setHubId(int hubId) {
+	public void setHubId(int hubId) 
+	{
 		this.hubId = hubId;
 	}
 
-	public int getHubId() {
+	public int getHubId() 
+	{
 		return hubId;
 	}
 
-	public void setReadings(ArrayList<Reading> readings) {
+	public void setReadings(ArrayList<Reading> readings) 
+	{
 		this.readings = readings;
 	}
 
-	public ArrayList<Reading> getReadings() {
+	public ArrayList<Reading> getReadings() 
+	{
 		return readings;
 	}
 	
-	public JSONArray getReadingsJSON () {
+	public JSONArray getReadingsJSON () 
+	{
 		JSONArray readings = new JSONArray();
 		
-		for (Reading r : getReadings()) {
+		for (Reading r : getReadings()) 
+		{
 			JSONObject j = new JSONObject();
-			try {
+			try 
+			{
 				j.put("sensorId", r.getSensorId());
 				j.put("load", r.getValue());
-			} catch (JSONException e) {
+			} catch (JSONException e) 
+			{
 				e.printStackTrace();
 			}
 			readings.put(j);
@@ -128,17 +142,12 @@ public class ReadingSet {
 				URI uri;
 				try
 				{
-					System.out.println("create uri");
 					uri = URIUtils.createURI("http", "79.125.20.47",- 1, "/dataStore/push.php",URLEncodedUtils.format(qparams, "UTF-8"),null);
-					System.out.println("new http get");
 					HttpGet httpGet = new HttpGet(uri);
-					System.out.println("new http client");
 					HttpClient httpClient = new DefaultHttpClient();
-					HttpHost proxy = new HttpHost("mainproxy.nottingham.ac.uk",8080);
-					httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
-					System.out.println("execute");
+					//HttpHost proxy = new HttpHost("mainproxy.nottingham.ac.uk",8080);
+					//httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
 					httpClient.execute(httpGet);
-					System.out.println("print final");
 					System.out.println(httpGet.getURI());
 				}
 				catch (Exception e)
