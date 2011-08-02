@@ -145,7 +145,7 @@ public class ReadingSet {
 					uri = URIUtils.createURI("http", "79.125.20.47",- 1, "/dataStore/push.php",URLEncodedUtils.format(qparams, "UTF-8"),null);
 					HttpGet httpGet = new HttpGet(uri);
 					HttpClient httpClient = new DefaultHttpClient();
-					//HttpHost proxy = new HttpHost("mainproxy.nottingham.ac.uk",8080);
+					HttpHost proxy = new HttpHost("mainproxy.nottingham.ac.uk",8080);
 					//httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
 					httpClient.execute(httpGet);
 					System.out.println(httpGet.getURI());
