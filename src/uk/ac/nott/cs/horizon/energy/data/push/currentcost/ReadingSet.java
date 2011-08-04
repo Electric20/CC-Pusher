@@ -1,8 +1,12 @@
 package uk.ac.nott.cs.horizon.energy.data.push.currentcost;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.HttpHost;
@@ -37,7 +41,7 @@ public class ReadingSet {
 	
 	private static SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
-	public JSONObject getJSON () 
+	public JSONObject getJSON () throws FileNotFoundException 
 	{
 		JSONObject pushJson = new JSONObject();
 		try 
@@ -51,9 +55,12 @@ public class ReadingSet {
 			pushJson.put("readingSet",json);
 			System.out.println(pushJson.toString());
 		} 
-		catch (JSONException e) 
+		catch (Exception e) 
 		{
 			e.printStackTrace();
+			FileOutputStream out = new FileOutputStream(new Date().toGMTString());
+			PrintStream ps = new PrintStream(out);
+			e.printStackTrace(ps);
 		}
 		return pushJson;
 	}
@@ -108,7 +115,7 @@ public class ReadingSet {
 		return readings;
 	}
 	
-	public JSONArray getReadingsJSON () 
+	public JSONArray getReadingsJSON () throws FileNotFoundException 
 	{
 		JSONArray readings = new JSONArray();
 		
@@ -122,6 +129,9 @@ public class ReadingSet {
 			} catch (JSONException e) 
 			{
 				e.printStackTrace();
+				FileOutputStream out = new FileOutputStream(new Date().toGMTString());
+				PrintStream ps = new PrintStream(out);
+				e.printStackTrace(ps);
 			}
 			readings.put(j);
 		}
@@ -129,7 +139,7 @@ public class ReadingSet {
 		return readings;
 	}
 	
-	public void upload()
+	public void upload() throws FileNotFoundException
 	{
 		final JSONObject json = this.getJSON();
 		new Thread(new Runnable()
@@ -146,13 +156,25 @@ public class ReadingSet {
 					HttpGet httpGet = new HttpGet(uri);
 					HttpClient httpClient = new DefaultHttpClient();
 					HttpHost proxy = new HttpHost("mainproxy.nottingham.ac.uk",8080);
-					//httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+					httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
 					httpClient.execute(httpGet);
 					System.out.println(httpGet.getURI());
 				}
 				catch (Exception e)
 				{
 					e.printStackTrace();
+					FileOutputStream out = null;
+					try
+					{
+						out = new FileOutputStream(new Date().toGMTString());
+					}
+					catch (FileNotFoundException e1)
+					{
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					PrintStream ps = new PrintStream(out);
+					e.printStackTrace(ps);
 				}
 			}
 		}).start();

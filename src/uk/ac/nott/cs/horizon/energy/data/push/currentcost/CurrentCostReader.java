@@ -7,6 +7,7 @@ import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 import gnu.io.UnsupportedCommOperationException;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -155,7 +156,15 @@ public class CurrentCostReader implements Runnable, SerialPortEventListener
 							{
 
 								ReadingSet rSet = new ReadingSet(user, apiKey, hubId, System.currentTimeMillis(), readings);
-								rSet.upload();
+								try
+								{
+									rSet.upload();
+								}
+								catch (FileNotFoundException e)
+								{
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 								readings.clear();
 							}
 						}

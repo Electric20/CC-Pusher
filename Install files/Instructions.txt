@@ -25,11 +25,15 @@ sudo apt-get install librxtx-java nano openjdk-6-jre pure-ftpd
 
 8.
 sudo crontab -e (select nano as editor)
-@reboot /home/jzc/ccpusher.sh
-0 */2 * * * reboot
+
 
 9.
 ftp files ccpusher_direct.jar, ccpusher_proxy.jar, ccpusher.sh into /home/jzc
 
 10.
 edit ccpusher.sh to use correct hubId
+
+11.
+chmod +x ccpusher.sh
+
+
