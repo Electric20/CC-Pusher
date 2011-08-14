@@ -9,7 +9,7 @@ replace  http://ports.ubuntu.com/ with http://old-releases.ubuntu.com/ubuntu/ in
 chmod 4755 /usr/bin/sudo
 
 4.
-"adduser jzc" with password jim16bob
+"adduser jzc" with password ********
 
 5.
 visudo
@@ -25,6 +25,7 @@ sudo apt-get install librxtx-java nano openjdk-6-jre pure-ftpd
 
 8.
 sudo crontab -e (select nano as editor)
+@reboot /home/jzc/ccpusher.sh
 
 
 9.
