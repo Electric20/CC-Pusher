@@ -16,7 +16,9 @@ visudo
 
 jzc ALL=NOPASSWD: ALL
 
+
 6. log out and log in as jzc
+   "sudo su passwd root" -> change root password from default
 
 7.
 export http_proxy='http://mainproxy.nottingham.ac.uk:8080' (if programming inside uni)
