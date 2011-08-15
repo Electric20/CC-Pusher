@@ -1,11 +1,16 @@
 1. add new hub into database using: 
-insert into tblHubDir values(54,'Dream Plug e428','2011-05-22 20:00:00',null);
-insert into tblSensorDir values (54,0,'House Sensor','2011-05-22 20:00:00',null,1,null);
+insert into tblHubDir values(XX,'XXXX XXXX','XXXX-XX-XX XX:XX:XX',null);
+insert into tblSensorDir values (XX,0,'House Sensor','XXXX-XX-XX XX:XX:XX',null,1,null);
 
-2. (dream plug only)
-replace  http://ports.ubuntu.com/ with http://old-releases.ubuntu.com/ubuntu/ in /etc/apt/sources.list
 
-3. (dream plug only)
+2. 
+clear /etc/apt/sources.list and insert:
+
+deb http://old-releases.ubuntu.com/ubuntu/ jaunty main restricted universe multiverse
+deb http://old-releases.ubuntu.com/ubuntu/ jaunty-updates main restricted universe multiverse
+deb http://old-releases.ubuntu.com/ubuntu/ jaunty-security main restricted universe multiverse
+
+3.
 chmod 4755 /usr/bin/sudo
 
 4.
@@ -29,9 +34,10 @@ sudo apt-get install librxtx-java nano openjdk-6-jre pure-ftpd
 sudo crontab -e (select nano as editor)
 @reboot /home/jzc/ccpusher.sh
 
-
 9.
-ftp files ccpusher_direct.jar, ccpusher_proxy.jar, ccpusher.sh into /home/jzc
+wget http://www.electric20.com/updates/ccpusher_direct.jar
+wget http://www.electric20.com/updates/ccpusher_proxy.jar
+wget http://www.electric20.com/updates/ccpusher.sh
 
 10.
 edit ccpusher.sh to use correct hubId
@@ -39,4 +45,11 @@ edit ccpusher.sh to use correct hubId
 11.
 chmod +x ccpusher.sh
 
+12. (dream plug only)
+/usr/bin/uaputl bss_stop
+/usr/bin/uaputl sys_config_ssid "Electric20-XXXX"
+/usr/bin/uaputl sys_cfg_protocol 32
+/usr/bin/uaputl sys_cfg_wpa_passphrase "********"
+/usr/bin/uaputl sys_cfg_cipher 8 8
+/usr/bin/uaputl bss_start
 
