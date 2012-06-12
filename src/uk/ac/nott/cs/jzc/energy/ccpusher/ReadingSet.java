@@ -1,12 +1,9 @@
-package uk.ac.nott.cs.horizon.energy.data.push.currentcost;
+package uk.ac.nott.cs.jzc.energy.ccpusher;
 
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.http.HttpHost;
@@ -32,14 +29,13 @@ public class ReadingSet {
 	
 	public ReadingSet (String user, String apiKey, int hubId, long timeStamp, ArrayList<Reading> readings) 
 	{
-		setUser(user);
-		setApiKey(apiKey);
-		setHubId(hubId);
-		setReadings(readings);
-		setTimeStamp(timeStamp);
+		this.user = user;
+		this.apiKey = apiKey;
+		this.hubId = hubId; 
+		this.readings = readings;
 	}
 	
-	private static SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private  SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	public JSONObject getJSON () throws FileNotFoundException 
 	{
@@ -47,10 +43,10 @@ public class ReadingSet {
 		try 
 		{
 			JSONObject json = new JSONObject();
-			json.put("user", getUser());
-			json.put("apiKey", getApiKey());
-			json.put("timeStamp", dateFormatter.format(getTimeStamp()));
-			json.put("hubId", getHubId());
+			json.put("user", user);
+			json.put("apiKey", apiKey);
+			json.put("timeStamp", dateFormatter.format(timeStamp));
+			json.put("hubId", hubId);
 			json.put("readings", getReadingsJSON());
 			pushJson.put("readingSet",json);
 			System.out.println(pushJson.toString());
@@ -58,68 +54,17 @@ public class ReadingSet {
 		catch (Exception e) 
 		{
 			e.printStackTrace();
-			FileOutputStream out = new FileOutputStream(new Date().toGMTString());
-			PrintStream ps = new PrintStream(out);
-			e.printStackTrace(ps);
 		}
 		return pushJson;
 	}
 
-	public void setUser(String user) 
-	{
-		this.user = user;
-	}
 
-	public String getUser() 
-	{
-		return user;
-	}
-
-	public void setApiKey(String apiKey) 
-	{
-		this.apiKey = apiKey;
-	}
-
-	public String getApiKey() 
-	{
-		return apiKey;
-	}
-
-	public void setTimeStamp(long timeStamp) 
-	{
-		this.timeStamp = timeStamp;
-	}
-
-	public long getTimeStamp() 
-	{
-		return timeStamp;
-	}
-
-	public void setHubId(int hubId) 
-	{
-		this.hubId = hubId;
-	}
-
-	public int getHubId() 
-	{
-		return hubId;
-	}
-
-	public void setReadings(ArrayList<Reading> readings) 
-	{
-		this.readings = readings;
-	}
-
-	public ArrayList<Reading> getReadings() 
-	{
-		return readings;
-	}
 	
 	public JSONArray getReadingsJSON () throws FileNotFoundException 
 	{
 		JSONArray readings = new JSONArray();
 		
-		for (Reading r : getReadings()) 
+		for (Reading r : this.readings) 
 		{
 			JSONObject j = new JSONObject();
 			try 
@@ -129,9 +74,6 @@ public class ReadingSet {
 			} catch (JSONException e) 
 			{
 				e.printStackTrace();
-				FileOutputStream out = new FileOutputStream(new Date().toGMTString());
-				PrintStream ps = new PrintStream(out);
-				e.printStackTrace(ps);
 			}
 			readings.put(j);
 		}
@@ -152,29 +94,17 @@ public class ReadingSet {
 				URI uri;
 				try
 				{
-					uri = URIUtils.createURI("http", "79.125.20.47",- 1, "/dataStore/push.php",URLEncodedUtils.format(qparams, "UTF-8"),null);
+					uri = URIUtils.createURI("http", "electric20.com",- 1, "/dataStore/push.php",URLEncodedUtils.format(qparams, "UTF-8"),null);
 					HttpGet httpGet = new HttpGet(uri);
 					HttpClient httpClient = new DefaultHttpClient();
-					HttpHost proxy = new HttpHost("mainproxy.nottingham.ac.uk",8080);
-					httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+					HttpHost proxy = new HttpHost("mainproxy.nottingham.ac.uk",8080); // comment out for non proxy version
+					httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy); // comment out for non proxy version
 					httpClient.execute(httpGet);
-					System.out.println(httpGet.getURI());
 				}
 				catch (Exception e)
 				{
 					e.printStackTrace();
-					FileOutputStream out = null;
-					try
-					{
-						out = new FileOutputStream(new Date().toGMTString());
-					}
-					catch (FileNotFoundException e1)
-					{
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					PrintStream ps = new PrintStream(out);
-					e.printStackTrace(ps);
+					
 				}
 			}
 		}).start();

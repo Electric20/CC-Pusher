@@ -1,4 +1,4 @@
-package uk.ac.nott.cs.horizon.energy.data.push.currentcost;
+package uk.ac.nott.cs.jzc.energy.ccpusher;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
@@ -74,7 +74,6 @@ public class CurrentCostReader implements Runnable, SerialPortEventListener
 			serialPort.notifyOnDataAvailable(true);
 			serialPort.setSerialPortParams(57600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 			readThread = new Thread(this);
-			System.out.println("Starting Thread");
 			readThread.start();
 
 		}
@@ -162,7 +161,6 @@ public class CurrentCostReader implements Runnable, SerialPortEventListener
 								}
 								catch (FileNotFoundException e)
 								{
-									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 								readings.clear();
